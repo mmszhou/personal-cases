@@ -2,6 +2,7 @@ package com.mms.cases.retry;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -14,6 +15,8 @@ public class retryDemo {
     //方法1 - 重试次数限制
     //存在问题，不带backoff的重试，对下游来说，失败时，请求压力加大，继而进一步恶化。
     public static <T> T retryNoDelay(final Callable<T> callable, final int maxAttempts) {
+
+        ReentrantLock r;
         //样本1
         for (int i = 0; i < maxAttempts; i++) {
             try {
